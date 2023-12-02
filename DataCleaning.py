@@ -86,19 +86,20 @@ WaysOfYes = ['Yes','yes','YES','Yes ','Y ','YEs','AP CLASSES - AP CLASSES - Yes'
 WaysOfNo = ['No','NO','no']
 
 for y in WaysOfYes:
-    dat['AP Classes?'] = dat['AP Classes?'].str.replace(y,'AP CLASSES - Yes')
-    dat['Dual Enrollment?'] = dat['Dual Enrollment?'].str.replace(y,'Dual Enrollment - Yes')
-    dat['Offers Sports?'] = dat['Offers Sports?'].str.replace(y,'Offers Sports - Yes')
+    dat['AP Classes?'] = dat['AP Classes?'].str.replace(y,'1')
+    dat['Dual Enrollment?'] = dat['Dual Enrollment?'].str.replace(y,'1')
+    dat['Offers Sports?'] = dat['Offers Sports?'].str.replace(y,'1')
 for n in WaysOfNo:
-    dat['AP Classes?'] = dat['AP Classes?'].str.replace(n,'AP Classes - No')
-    dat['Dual Enrollment?'] = dat['Dual Enrollment?'].str.replace(n,'Dual Enrollment - No')
-    dat['Offers Sports?'] = dat['Offers Sports?'].str.replace(n,'Offers Sports - No')
+    dat['AP Classes?'] = dat['AP Classes?'].str.replace(n,'0')
+    dat['Dual Enrollment?'] = dat['Dual Enrollment?'].str.replace(n,'0')
+    dat['Offers Sports?'] = dat['Offers Sports?'].str.replace(n,'0')
     
 a = dat['AP Classes?'].value_counts()
 print("Now it looks like\n",a)
 print("I WILL DO THIS FOR ALL Y/N FEATURES BUT WILL NOT SHOW IT ALL :)")
 
 v = dat['Student-Teacher Ratio'].value_counts()
+
 print("\nLooking at the [Student-Teacher ratio] there are 27 missing values.")
 print("At this point that is more than a 5th of our data, therefore I think it is")
 print("better if we just drop the column")
@@ -113,17 +114,18 @@ print("\nI also made the city column all uppercase so that when I divide them up
 print("catagorically the names are consitant")
 #Making the new data
 print("\nNow I am making the new data First we add the ratio values")
-newDat = dat[["2022 Student Enrollments","National Rank","AZ Rank",'Racial%-White','Racial%-Black','Racial%-Native','Racial%-Hispanic',\
+newDat = dat[['School Name','City',"2022 Student Enrollments","National Rank","AZ Rank",'Racial%-White','Racial%-Black','Racial%-Native','Racial%-Hispanic',\
            'Racial%-Asian','Racial%-Other']]
 
 print("New Data shape",newDat.shape)
-cat = ['School Name','City','AP Classes?','Dual Enrollment?','Offers Sports?']
+cat = ['AP Classes?','Dual Enrollment?','Offers Sports?']
 for c in cat :
-    newDat = pd.concat([newDat,pd.get_dummies(dat[c])],axis=1)
+    newDat = pd.concat([newDat,dat[c].astype(int)],axis=1)
 
 print("\nNow sorting all of the catagorical comlumns")
 print("New Data shape",newDat.shape)
 
+newDat.to_csv("NewDat.csv")
 
 
 
